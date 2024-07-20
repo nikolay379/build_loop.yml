@@ -1,7 +1,7 @@
 
 
 # build_loop.yml
-steps:
+
   - script: create-user.sh 'john'
     displayName: 'Create user <john>'
   - script: create-user.sh 'jane'
@@ -20,7 +20,7 @@ steps:
     displayName: 'Grant Data Factory access to <jane>'
   - script: grant-datafactory-access.sh 'bob'
     displayName: 'Grant Data Factory access to <bob>'  
-parameters:
+
   - name: users
     type: object
     default:
@@ -34,7 +34,7 @@ parameters:
       displayName: 'Grant database access to ${{ user }}'
     - script: grant-datafactory-access.sh ${{ user }}
       displayName: 'Grant Data Factory access to ${{ user }}'  
-parameters:
+
   - name: users
     type: object
     default:
@@ -42,7 +42,7 @@ parameters:
       - jane
       - bob
 
-steps:
+
   - ${{ each user in parameters.users }}:
     - script: create-user.sh ${{ user }}
       displayName: 'Create user ${{ user }}'
@@ -50,7 +50,7 @@ steps:
       displayName: 'Grant database access to ${{ user }}'
     - script: grant-datafactory-access.sh ${{ user }}
       displayName: 'Grant Data Factory access to ${{ user }}'  
-parameters:
+
   - name: users
     type: object
     default:
@@ -60,13 +60,13 @@ parameters:
         email: 'jane@doe.com'
       - bob
 
-steps:
+
   - ${{ each user in parameters.users }}:
     - ${{ if eq(user.name, '') }}:
       - script: echo 'User ${{ user }} has no email.'
     - ${{ if ne(user.name, '') }}:
       - script: echo 'User ${{ user.name }} with email ${{ user.email }}.'
-variables:
+
   environment_name: Development
   environment_code: d
 variables:
@@ -79,7 +79,7 @@ parameters:
       - dev
       - prod
 
-jobs:
+
   - ${{ each target in parameters.targets }}:
     - job:
       displayName: 'Deploy ${{ target }}'
